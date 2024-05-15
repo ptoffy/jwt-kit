@@ -10,17 +10,28 @@ public extension SPX {
     struct PublicKey: SPXKey {
         private let backing: _CryptoExtras.SPX.PublicKey
 
-        public init() {
-            let seed: [UInt8] = (0 ..< 64).map { _ in UInt8.random(in: 0 ... 255) }
-            self.backing = _CryptoExtras.SPX.PublicKey(from: seed)
+        public var pemRepresentation: String {
+            backing.pemRepresentation
+        }
+
+        public var derRepresentation: Data {
+            backing.derRepresentation
         }
 
         public init(backing: _CryptoExtras.SPX.PublicKey) {
             self.backing = backing
         }
 
-        public init(seed: [UInt8]) {
-            self.backing = _CryptoExtras.SPX.PublicKey(from: seed)
+        public init(pem: String) throws {
+            self.backing = try .init(pemRepresentation: pem)
+        }
+
+        public init(der: some DataProtocol) throws {
+            self.backing = try .init(derRepresentation: der)
+        }
+
+        public init(seed: [UInt8]) throws {
+            self.backing = try _CryptoExtras.SPX.PublicKey(from: seed)
         }
 
         public var bytes: [UInt8] {
@@ -35,17 +46,32 @@ public extension SPX {
     struct PrivateKey: SPXKey {
         private let backing: _CryptoExtras.SPX.PrivateKey
 
+        public var pemRepresentation: String {
+            backing.pemRepresentation
+        }
+
+        public var derRepresentation: Data {
+            backing.derRepresentation
+        }
+
         public init() {
-            let seed: [UInt8] = (0 ..< 64).map { _ in UInt8.random(in: 0 ... 255) }
-            self.backing = _CryptoExtras.SPX.PrivateKey(from: seed)
+            self.backing = _CryptoExtras.SPX.PrivateKey()
+        }
+
+        public init(pem: String) throws {
+            self.backing = try .init(pemRepresentation: pem)
+        }
+
+        public init(der: some DataProtocol) throws {
+            self.backing = try .init(derRepresentation: der)
         }
 
         public init(backing: _CryptoExtras.SPX.PrivateKey) {
             self.backing = backing
         }
 
-        public init(seed: [UInt8]) {
-            self.backing = _CryptoExtras.SPX.PrivateKey(from: seed)
+        public init(seed: [UInt8]) throws {
+            self.backing = try _CryptoExtras.SPX.PrivateKey(from: seed)
         }
 
         public var bytes: [UInt8] {
