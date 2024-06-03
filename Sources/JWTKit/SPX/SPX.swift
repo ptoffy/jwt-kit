@@ -38,8 +38,8 @@ public extension SPX {
             self.backing.bytes
         }
 
-        func isValidSignature<D: Digest>(_ signature: _CryptoExtras.SPX.Signature, for digest: D) -> Bool {
-            self.backing.isValidSignature(signature, for: digest)
+        func isValidSignature(_ signature: _CryptoExtras.SPX.Signature, for data: some DataProtocol) -> Bool {
+            self.backing.isValidSignature(signature, for: data)
         }
     }
 
@@ -82,8 +82,8 @@ public extension SPX {
             PublicKey(backing: self.backing.publicKey)
         }
 
-        func signature<D: Digest>(for digest: D, randomized: Bool = false) -> _CryptoExtras.SPX.Signature {
-            self.backing.signature(for: digest, randomized: randomized)
+        func signature(for data: some DataProtocol, randomized: Bool = false) -> _CryptoExtras.SPX.Signature {
+            self.backing.signature(for: data, randomized: randomized)
         }
     }
 }

@@ -25,19 +25,16 @@ struct SPXSigner: JWTAlgorithm, CryptoSigner {
 
     func sign(_ plaintext: some DataProtocol) throws -> [UInt8] {
         guard let privateKey else {
-            throw JWTError.signingAlgorithmFailure(RSAError.privateKeyRequired)
+            throw JWTError.signingAlgorithmFailure(SPXError.privateKeyOrSeedRequired)
         }
 
-        let digest = try self.digest(plaintext)
-
-        let signature = privateKey.signature(for: digest)
+        let signature = privateKey.signature(for: plaintext)
         return [UInt8](signature.rawRepresentation)
     }
 
     func verify(_ signature: some DataProtocol, signs plaintext: some DataProtocol) throws -> Bool {
-        let digest = try self.digest(plaintext)
         let signature = _CryptoExtras.SPX.Signature(rawRepresentation: signature)
 
-        return publicKey.isValidSignature(signature, for: digest)
+        return publicKey.isValidSignature(signature, for: plaintext)
     }
 }
