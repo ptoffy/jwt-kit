@@ -2,7 +2,7 @@ import _CryptoExtras
 
 public extension JWTKeyCollection {
     @discardableResult
-    func addSPX(
+    func add(
         key: some SPXKey,
         kid: JWKIdentifier? = nil,
         parser: some JWTParser = DefaultJWTParser(),
